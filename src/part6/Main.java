@@ -12,7 +12,8 @@ public class Main {
 		SparkSession spark = SparkSession.builder().appName("Bai_6").master("local").getOrCreate();
 		Dataset<Row> data = spark.read().option("header", true).option("inferSchema", true).csv("src/part6/input.csv");
 		
-		WindowSpec wins = Window.partitionBy("department").orderBy("id").rowsBetween(Window.unboundedPreceding(), Window.unboundedFollowing());
+		WindowSpec wins = Window.partitionBy("department").orderBy("id")
+				.rowsBetween(Window.unboundedPreceding(), Window.unboundedFollowing());
 		Dataset<Row> result_1 = data.withColumn("diff_max", functions.max("salary").over(wins));
 		
 		result_1.createOrReplaceTempView("data_1");
